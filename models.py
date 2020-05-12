@@ -48,7 +48,6 @@ class User(UserMixin, Model): # all models must inherit from models
 	name = CharField()
 	company = CharField()
 	position = CharField()
-	admin = Boolean()
 
 	class Meta: 
 		database = DATABASE
@@ -93,9 +92,9 @@ class Ticket(Model): # all models must inherit from models
 	priority = CharField()
 	ticket_type = CharField()
 	status = CharField()
-	created_at = DateTimeField(default=datetime.now)
+	created_at = DateTimeField(default=datetime.datetime.now)
 	project = ForeignKeyField(Project, backref='tickets') #project who owns that ticket ticket.project backref for project.ticket
-	developer = ForeignKeyField(Developer, backref='tickets') #project who owns that ticket ticket.developer backref for developer.ticket
+	user = ForeignKeyField(User, backref='tickets') #project who owns that ticket ticket.user backref for user.ticket
 
 	class Meta:
 		database = DATABASE
