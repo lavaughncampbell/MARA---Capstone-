@@ -6,22 +6,16 @@
 # <--------------------------------------------> 
 # this holds all the important info.  
 # jsonify let's us send JSON HTTP responses (like res.json)
+# updated flask import with url_for, redirect, session for google. 
+# also installed requests for google 
 from flask import Flask, jsonify, url_for, redirect, session
 
 
-
-
-# TESTING TESTING TESTING OAUTH 
+# <--------------- AUTHLIB  ------------------>
+# IMPORT AUTHLIB FOR OAUTH
+# <--------------------------------------------> 
+# installed Authlib for building OAuth and OpenID connect
 from authlib.integrations.flask_client import OAuth
-
-
-
-
-
-
-
-
-
 
 
 
@@ -78,13 +72,20 @@ PORT=8000
 
 
 
+
 # <--------------- FLASK APP  ------------------>
 # USE FLASK TO CREATE APP 
 # <--------------------------------------------> 
 # Instantiating the Flask class to create an app. 
 app = Flask(__name__)
-# TESTING TESTING TESTING OAUTH 
-# oauth config 
+
+
+
+
+# <--------------- GOOGLE LOGIN  ------------------>
+# OAUTH CONFIGURATION FOR GOOGLE 
+# <--------------------------------------------> 
+# Configuring the google login 
 oauth = OAuth(app)
 google = oauth.register(
   name='google',
@@ -98,6 +99,8 @@ google = oauth.register(
     # userinfo_endpoint='https://openidconnect.googleapis.com/v1/userinfo',  # This is only needed if using openId to fetch user info
     client_kwargs={'scope': 'openid email profile'},
 )
+
+
 
 
 # <------ LOGIN MANAGER SETUP  -------->
@@ -134,6 +137,7 @@ def unauthorized():
 
 
 
+
 # <----------- CORS SETUP -------------->
 # SETUP FOR CORS 
 # <--------------------------------------------> 
@@ -167,10 +171,11 @@ app.register_blueprint(users, url_prefix='/api/v1/users')
 
 
 
-# <----------- TEST ROUTES  -------------->
-# TESTING 
+
+# <----------- GOOGLE ROUTES -------------->
+# GOOGLE OAUTH ROUTES 
 # <--------------------------------------------> 
-# Testing successful connection of the app 
+# This goes to google to authenticate the user.  
 @app.route('/')
 def hello():
   email = dict(session).get('email', None)
@@ -195,6 +200,7 @@ def authorize():
 
 
 
+  
 # <----------- LISTENER  -------------->
 # LISTENER FOR THE APP  
 # <--------------------------------------------> 
