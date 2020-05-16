@@ -41,7 +41,8 @@ def create_member():
   # .get_json() attached to request will extract JSON from request body 
   payload = request.get_json() 
   print(payload)
-  models.Member.create(name=payload['name'], email=payload['email'], user=payload['user'])
+  new_member = models.Member.create(name=payload['name'], email=payload['email'], user=payload['user'])
+  print(new_member) # this returns the id of the member 
   # if you check terminal you can see your body request like req.body 
   return "you hit member create route -- check terminal"
 
