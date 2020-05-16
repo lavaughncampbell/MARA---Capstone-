@@ -58,9 +58,10 @@ class User(UserMixin, Model): # all models must inherit from models
 # <--------------- TEAM  ------------------>
 # DEFINE TEAM MODEL 
 # <--------------------------------------------> 
-class Team(Model): # all models must inherit from models
+class Member(Model): # all models must inherit from models
+	name = CharField()
 	email = CharField()
-	company = CharField()
+	user = ForeignKeyField(User, backref='member')
 
 	class Meta:
 		database = DATABASE
@@ -74,7 +75,7 @@ class Team(Model): # all models must inherit from models
 class Project(Model): # all models must inherit from models
 	name = CharField()
 	description = CharField()
-	team = ForeignKeyField(Team, backref='projects') #team who owns that project projects.team. backref for team.projects
+	member = ForeignKeyField(Member, backref='projects') #team who owns that project projects.team. backref for team.projects
 
 
 	class Meta:
@@ -108,7 +109,7 @@ def initialize(): # method that will get called when the app starts
 	DATABASE.connect()
 
 	# create tables based on the model schemas. 
-	DATABASE.create_tables([User, Team, Project, Ticket], safe=True)
+	DATABASE.create_tables([User, Member, Project, Ticket], safe=True)
 	print("Connected to DB and created tables if they weren't already there")
 
 	DATABASE.close() # close sql database connection. 

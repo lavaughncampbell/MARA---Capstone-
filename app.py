@@ -28,8 +28,8 @@ from authlib.integrations.flask_client import OAuth
 # from resources.tickets import tickets
 # # PROJECTS
 # from resources.projects import projects
-# # TEAMS
-# from resources.teams import teams
+# # MEMBERS
+from resources.members import members
 # # USERS
 from resources.users import users 
 
@@ -163,8 +163,9 @@ CORS(users, origins=['http://localhost:3000'],
 # Controller of the app
 app.register_blueprint(users, url_prefix='/api/v1/users')
 
-# app.register_blueprint(teams, url_prefix='/api/v1/teams')
-
+# use this blueprint (component/piece/section/controller of the app) 
+app.register_blueprint(members, url_prefix='/api/v1/members')
+# similar to app.use('/api/v1/members', memberController)
 # app.register_blueprint(projects, url_prefix='/api/v1/projects')
 
 # app.register_blueprint(tickets, url_prefix='/api/v1/tickets')
@@ -176,18 +177,21 @@ app.register_blueprint(users, url_prefix='/api/v1/users')
 # GOOGLE OAUTH ROUTES 
 # <--------------------------------------------> 
 # This goes to google to authenticate the user.  
+
+# <---- Home -----> 
 @app.route('/')
 def hello():
   email = dict(session).get('email', None)
   return f'Hello, {email}!'
 
-# TESTING TESTING TESTING OAUTH 
+# <---- Login -----> 
 @app.route('/login')
 def login():
   google = oauth.create_client('google')
   redirect_uri = url_for('authorize', _external=True)
   return google.authorize_redirect(redirect_uri)
 
+# <---- Authorize -----> 
 @app.route('/authorize')
 def authorize():
   google = oauth.create_client('google')
@@ -198,9 +202,14 @@ def authorize():
   session['email'] = user_info['email']
   return redirect('/')
 
+# <---- Logout -----> 
+@app.route('/logout')
+def logout():
+  for key in list(session.keys()):
+    session.pop(key)
+  return redirect('/') 
 
 
-  
 # <----------- LISTENER  -------------->
 # LISTENER FOR THE APP  
 # <--------------------------------------------> 

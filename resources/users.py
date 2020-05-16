@@ -39,8 +39,12 @@ from flask_login import login_user, current_user, logout_user # login_user will 
 # user blueprint. 
 users = Blueprint('users', 'users')
 
+
+
+
+# GET localhost:8000/api/v1/users -- users index 
 @users.route('/', methods=['GET'])
-def test_user_resource():
+def users_index():
   return "user resource works"
 
 
