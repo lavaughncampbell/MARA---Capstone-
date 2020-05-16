@@ -3,10 +3,15 @@ import models
 
 
 # blueprint is a way to create a self-contained grouping 
-from flask import Blueprint, request
+from flask import Blueprint, request, jsonify # import jsonify to define it. 
 # request is --- data from clients is sent to the global request object 
 # we can use this objet to get the json or form data or whatever 
 # POST OR PUT requests have bodies
+
+# this is a useful tool that comes with peewee. this is how we will convert
+# our new member to a dictionary that will include all the fields from the database. 
+from playhouse.shortcuts import model_to_dict
+
 
 
 # creating our blueprint
@@ -42,12 +47,34 @@ def create_member():
   payload = request.get_json() 
   print(payload)
   new_member = models.Member.create(name=payload['name'], email=payload['email'], user=payload['user'])
-  print(new_member) # this returns the id of the member 
+  print(new_member) # this returns the id of the member -- check sqlite to see it. run sqlite3 members.sqlite
   # if you check terminal you can see your body request like req.body 
-  return "you hit member create route -- check terminal"
+
+  print(new_member.__dict__) # this is when you print a dict. all my data is in there. 
+   
+                             # dict is a class attribute automatically added to python classes
+  
+
+  # you can't jsonify new member directly because its not a dictionary. it has a bunch of methods attached to it. 
+  print(dir(new_member)) # look at all this model suff
+
+  member_dict = model_to_dict(new_member) # now we have something jsonifiable 
+  # you get some meta data when you make a API request like "request successsful"
+  # lets do some of that. 
+  return jsonify(
+    data=member_dict, 
+    message='Successfully created member!', 
+    status=201
+    ), 201
+
+ # THIS IS NOW LOOKING LIKE A REAL API. YOU TALK TO IT IN JSON IT TALKS BACK IN JSON 
 
 # peewee lets us interact with our database. 
 # an object is a dictonary in Python 
 # payload has the data you want to have 
 # use the models field in yoru create 
 # models.Member allows you take access 
+# send back the member we just created we will write a response to say it worked. 
+# not serializable you can't just send back the new member
+
+# for most things you can do member.__dict__ 
