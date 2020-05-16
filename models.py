@@ -61,7 +61,7 @@ class User(UserMixin, Model): # all models must inherit from models
 class Member(Model): # all models must inherit from models
 	name = CharField()
 	email = CharField()
-	user = ForeignKeyField(User, backref='member')
+	user = CharField()
 
 	class Meta:
 		database = DATABASE
