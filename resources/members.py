@@ -26,8 +26,32 @@ members = Blueprint('members', 'members')
 # GET /api/v1/members 
 @members.route('/', methods=['GET'])
 def members_index():
-  return "members resource working"
+  result = models.Member.select() # query 
 
+
+
+  print('result of member')
+  print(result)
+
+  # create new list 
+  # for member in result:
+  #   print(model_to_dict(member))
+    # this loop gives you the members as dicts (objects) in the terminal 
+  # use a loop to populate the list 
+  # convert each model to a dict using model_to_dict 
+
+  #OR 
+
+  # use a list comprehension 
+  member_dict = [model_to_dict(member) for member in result]
+  print(member_dict)
+
+  return jsonify({
+    'data': member_dict, 
+    'message': f"Successfully found {len(member_dict)} members",
+    'status': 200
+    }), 200
+  # WORKS! THIS RETURNS ALL THE MEMBERS DICTS (OBJECTS) 
   # WE DONT WANT TO REALLY GET INTO A INDEX ROUTE BEFORE CREATE ROUTE 
 
 
@@ -40,6 +64,8 @@ def members_index():
 # this is like app.posts 
 @members.route('/', methods=['POST'])
 def create_member():
+  """creates a member in the database"""
+
   # request has a helpful method that will take data in a request 
   # and give it to us as JSON 
   # store this info in a variable called payload
@@ -58,6 +84,7 @@ def create_member():
   # you can't jsonify new member directly because its not a dictionary. it has a bunch of methods attached to it. 
   print(dir(new_member)) # look at all this model suff
 
+  # we can use model_to_dict from playhouse (imported above -- playhouse === helpfule resource)
   member_dict = model_to_dict(new_member) # now we have something jsonifiable 
   # you get some meta data when you make a API request like "request successsful"
   # lets do some of that. 
