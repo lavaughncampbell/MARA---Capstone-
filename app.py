@@ -49,6 +49,7 @@ import models
 # CROSS ORIGIN RESOURCE SHARING 
 # <--------------------------------------------> 
 # allow CORS for all domains and routes.  
+# import this package to handling cors 
 from flask_cors import CORS 
 
 
@@ -136,6 +137,14 @@ def unauthorized():
   ), 401
 
 
+# CORS -- Cross Origin Resource Sharing 
+# a web domain (site/port/etc) is an "origin"
+# this app is localhost:8000, that's an "origin"
+# our react app is localhost:3000, that's a different origin 
+# Browsers implement CORS to prevent an JS app from sending requests 
+# to origins other than the one browser originally went to get that JS 
+# configuring CORS lets server say "heres who I'm expecting to hear from"
+
 
 
 # <----------- CORS SETUP -------------->
@@ -145,8 +154,13 @@ def unauthorized():
 CORS(users, origins=['http://localhost:3000'],
   supports_credentials=True)
 
-# CORS(teams, origins=['http://localhost:3000'],
-#   supports_credentials=True)
+# first arg -- we are adding cors to blueprints, which blueprint to use 
+# you can CORS the whole app too)
+# second arg -- which origins are allowed 
+# thid arg -- lets us accept requests within cookies attaches so that we can use 
+# sessions for auth
+CORS(members, origins=['http://localhost:3000'],
+  supports_credentials=True)
 
 # CORS(projects, origins=['http://localhost:3000'],
 #   supports_credentials=True)
