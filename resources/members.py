@@ -20,6 +20,15 @@ from playhouse.shortcuts import model_to_dict
 # similar to createing a router in express 
 members = Blueprint('members', 'members')
 
+
+
+
+
+
+
+
+
+
 # ----------># ----------># ---------->
 # INDEX 
 
@@ -53,6 +62,23 @@ def members_index():
     }), 200
   # WORKS! THIS RETURNS ALL THE MEMBERS DICTS (OBJECTS) 
   # WE DONT WANT TO REALLY GET INTO A INDEX ROUTE BEFORE CREATE ROUTE 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -105,3 +131,17 @@ def create_member():
 # not serializable you can't just send back the new member
 
 # for most things you can do member.__dict__ 
+
+
+# ----------># ----------># ---------->
+# DELETE 
+@members.route('/<id>', methods=['DELETE']) # this is a decorator. Inside of it is the id specific to the member we want to delete and the method to DELETE.
+def delete_member(id):
+  # we are trying to delete the member with the id. 
+  delete_query = models.Member.delete().where(models.Member.id == id)
+  delete_query.execute()
+  num_of_rows_deleted = delete_query.execute()
+  print(num_of_rows_deleted)
+  return "check terminal"
+
+  
