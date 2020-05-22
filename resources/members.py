@@ -133,6 +133,12 @@ def create_member():
 # for most things you can do member.__dict__ 
 
 
+
+
+
+
+
+
 # ----------># ----------># ---------->
 # DELETE 
 @members.route('/<id>', methods=['DELETE']) # this is a decorator. Inside of it is the id specific to the member we want to delete and the method to DELETE.
@@ -152,4 +158,35 @@ def delete_member(id):
     status=200
   ), 200
 
+
+
+
+
+# ----------># ----------># ---------->
+# UPDATE
+@members.route('/<id>', methods=['PUT'])
+def update_member(id):
+  payload = request.get_json()
+
+  update_query = models.Member.update(
+    name=payload['name'], 
+    email=payload['email'],
+    user=payload['user']
+  ).where(models.Member.id == id) # specify where you want to update
+
+  num_of_rows_modified = update_query.execute()
+
+  #todo: we could do some better error checking here 
   
+  # lets grab the updated member from database so we can include the 
+  # modified member in the response we're sending back to the 
+  # front end 
+
+  updated_member = models.Member.get_by_id(id)
+  updated_member_dict = model_to_dict(updated_member)
+
+  return jsonify(
+      data=updated_member_dict,
+      message=f"Successfully updated dog with id {id}".format(id),
+      status=200
+    ), 200
