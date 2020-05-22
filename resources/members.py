@@ -142,6 +142,14 @@ def delete_member(id):
   delete_query.execute()
   num_of_rows_deleted = delete_query.execute()
   print(num_of_rows_deleted)
-  return "check terminal"
+
+  # todo: write logic -- if no rows were deleted return 
+  # some message that delete didn't happen 
+  return jsonify(
+    data={},
+    message="Successfully deleted {} with id {}".format(
+      num_of_rows_deleted, id),
+    status=200
+  ), 200
 
   
