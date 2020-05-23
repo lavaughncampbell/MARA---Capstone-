@@ -203,6 +203,8 @@ def logout():
 
 
 
+# WARNING!: TEMPORARY ROUTE FOR TESTING! ALL USERS 
+
 @users.route('/all', methods=['GET'])
 def user_index():
 
@@ -216,6 +218,43 @@ def user_index():
   print(user_dicts)
 
   return jsonify(user_dicts), 200
+
+
+  # WARNING!: TEMPORARY ROUTE FOR TESTING! LOGGED IN USER 
+
+@users.route('/logged_in_user', methods=['GET'])
+def get_logged_in_user():
+  # https://flask-login.readthedocs.io/en/latest/#flask_login.current_user
+  # we can access current_user because we called login_user and set up user_loader
+  print(current_user)
+  print(type(current_user)) # <class 'werkzeug.local.LocalProxy'> # google it if you're interested
+
+
+  # you can tell whether a user is logged in using
+  # current_user.is_authenticated (search in the docs)
+
+  if not current_user.is_authenticated: 
+    return jsonify(
+      data={},
+      message="No user is currently logged in",
+      status=401,
+    ), 401
+
+  else:
+    user_dict = model_to_dict(current_user)
+    user_dict.pop('password')
+
+    # OBSERVE -- YOU now have access to the currently logged in user 
+    # anywhere you want using current_user
+    # also observe -- with flask_login, it will remember who is logged in 
+    # EVEN IF THE SERVER RESTARTS (unlike express/nodemon)
+
+    return jsonify(
+      data=user_dict,
+      message=f"Currently logged in as {user_dict['email']}.",
+      status=200
+    ), 200
+
 
 
 

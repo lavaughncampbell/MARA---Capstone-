@@ -12,6 +12,7 @@ from flask import Blueprint, request, jsonify # import jsonify to define it.
 # our new member to a dictionary that will include all the fields from the database. 
 from playhouse.shortcuts import model_to_dict
 
+from flask_login import current_user
 
 
 # creating our blueprint
@@ -88,8 +89,9 @@ def members_index():
 # POST /api/v1/members 
 # SPECIFY THE HTTP METHOD 
 # this is like app.posts 
-@members.route('/<user_id>', methods=['POST'])
-def create_member(user_id):
+# We can now access the id of the currently logged in user
+@members.route('/', methods=['POST'])
+def create_member():
   """creates a member in the database"""
 
   # request has a helpful method that will take data in a request 
@@ -100,7 +102,7 @@ def create_member(user_id):
   print(payload)
   new_member = models.Member.create(
     name=payload['name'], 
-    user=user_id,
+    user=current_user.id, # using the logged in user to set this. if you are logged in the member created is associated with you 
     email=payload['email'] 
   )
 
@@ -121,7 +123,7 @@ def create_member(user_id):
   # lets do some of that. 
   print(member_dict)
   member_dict['user'].pop('password') # remove password from user 
-  
+
   return jsonify(
     data=member_dict, 
     message='Successfully created member!', 
