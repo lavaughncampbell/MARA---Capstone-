@@ -61,7 +61,7 @@ class User(UserMixin, Model): # all models must inherit from models
 class Member(Model): # all models must inherit from models
 	name = CharField()
 	email = CharField()
-	user = CharField()
+	user = ForeignKeyField(User, backref='members')
 
 	class Meta:
 		database = DATABASE
@@ -75,7 +75,7 @@ class Member(Model): # all models must inherit from models
 class Project(Model): # all models must inherit from models
 	name = CharField()
 	description = CharField()
-	member = ForeignKeyField(Member, backref='projects') #team who owns that project projects.team. backref for team.projects
+	user = ForeignKeyField(User, backref='projects') #team who owns that project projects.team. backref for team.projects
 
 
 	class Meta:

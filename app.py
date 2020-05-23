@@ -158,7 +158,7 @@ CORS(users, origins=['http://localhost:3000'],
 # you can CORS the whole app too)
 # second arg -- which origins are allowed 
 # thid arg -- lets us accept requests within cookies attaches so that we can use 
-# sessions for auth
+# sessions for auth00
 CORS(members, origins=['http://localhost:3000'],
   supports_credentials=True)
 

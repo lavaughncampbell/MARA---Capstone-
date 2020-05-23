@@ -88,8 +88,8 @@ def members_index():
 # POST /api/v1/members 
 # SPECIFY THE HTTP METHOD 
 # this is like app.posts 
-@members.route('/', methods=['POST'])
-def create_member():
+@members.route('/<user_id>', methods=['POST'])
+def create_member(user_id):
   """creates a member in the database"""
 
   # request has a helpful method that will take data in a request 
@@ -98,7 +98,12 @@ def create_member():
   # .get_json() attached to request will extract JSON from request body 
   payload = request.get_json() 
   print(payload)
-  new_member = models.Member.create(name=payload['name'], email=payload['email'], user=payload['user'])
+  new_member = models.Member.create(
+    name=payload['name'], 
+    user=user_id,
+    email=payload['email'] 
+  )
+
   print(new_member) # this returns the id of the member -- check sqlite to see it. run sqlite3 members.sqlite
   # if you check terminal you can see your body request like req.body 
 
@@ -139,6 +144,14 @@ def create_member():
 
 
 
+
+
+
+
+
+
+
+
 # ----------># ----------># ---------->
 # DELETE 
 @members.route('/<id>', methods=['DELETE']) # this is a decorator. Inside of it is the id specific to the member we want to delete and the method to DELETE.
@@ -157,6 +170,18 @@ def delete_member(id):
       num_of_rows_deleted, id),
     status=200
   ), 200
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
