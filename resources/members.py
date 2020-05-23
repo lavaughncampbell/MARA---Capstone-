@@ -53,12 +53,17 @@ def members_index():
   #OR 
 
   # use a list comprehension 
-  member_dict = [model_to_dict(member) for member in result]
-  print(member_dict)
+
+  current_user_member_dicts = [model_to_dict(member) for member in current_user.members]
+
+  for member_dict in current_user_member_dicts: 
+    member_dict['user'].pop('password')
+
+  print(current_user_member_dicts)
 
   return jsonify({
-    'data': member_dict, 
-    'message': f"Successfully found {len(member_dict)} members",
+    'data': current_user_member_dicts, 
+    'message': f"Successfully found {len(current_user_member_dicts)} members",
     'status': 200
     }), 200
   # WORKS! THIS RETURNS ALL THE MEMBERS DICTS (OBJECTS) 
