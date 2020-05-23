@@ -119,6 +119,9 @@ def create_member(user_id):
   member_dict = model_to_dict(new_member) # now we have something jsonifiable 
   # you get some meta data when you make a API request like "request successsful"
   # lets do some of that. 
+  print(member_dict)
+  member_dict['user'].pop('password') # remove password from user 
+  
   return jsonify(
     data=member_dict, 
     message='Successfully created member!', 
