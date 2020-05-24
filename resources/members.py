@@ -12,7 +12,7 @@ from flask import Blueprint, request, jsonify # import jsonify to define it.
 # our new member to a dictionary that will include all the fields from the database. 
 from playhouse.shortcuts import model_to_dict
 
-from flask_login import current_user
+from flask_login import current_user, login_required
 
 
 # creating our blueprint
@@ -35,6 +35,7 @@ members = Blueprint('members', 'members')
 
 # GET /api/v1/members 
 @members.route('/', methods=['GET'])
+@login_required
 def members_index():
   result = models.Member.select() # query 
 
